@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Retom RT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <style>
+        :root {
+            --primary: #15a086;
+            --secondary: #15a086;
+            --dark: #0a0a1a;
+            --light: #f0f0ff;
+            --accent: #ff2d7b;
+            --success: #2dff7b;
+            --warning: #ff7b2d;
+            --error: #ff2d7b;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1a3a 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .user-info {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info i {
+            font-size: 1.2rem;
+        }
+        
+        .admin-panel {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-nav a {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .sidebar-nav a:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .sidebar-nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .sidebar-nav i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #12826d;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-danger {
+            background-color: var(--error);
+        }
+        
+        .btn-danger:hover {
+            background-color: #d81b60;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background-color: var(--success);
+        }
+        
+        .alert-error {
+            background-color: var(--error);
+        }
+        
+        .alert-info {
+            background-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        .table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .edit-btn {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="admin-panel">
+        <header>
+            <div class="container header-container">
+                <a href="#" class="logo">Retom RT - Panel de Administración</a>
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="current-user">Administrador</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="container">
+            <div class="admin-panel">
+                <div class="sidebar">
+                    <ul class="sidebar-nav" id="admin-nav">
+                        <li><a href="#" class="active" data-tab="general"><i class="fas fa-cog"></i> Configuración General</a></li>
+                        <li><a href="#" data-tab="about"><i class="fas fa-info-circle"></i> Quiénes Somos</a></li>
+                        <li><a href="#" data-tab="products"><i class="fas fa-boxes"></i> Productos</a></li>
+                        <li><a href="#" data-tab="clients"><i class="fas fa-users"></i> Clientes</a></li>
+                        <li><a href="#" data-tab="social"><i class="fas fa-share-alt"></i> Redes Sociales</a></li>
+                        <li><a href="#" data-tab="messages"><i class="fas fa-envelope"></i> Mensajes</a></li>
+                    </ul>
+                </div>
+                
+                <div class="main-content">
+                    <!-- Configuración General -->
+                    <div id="general-tab" class="tab-content active">
+                        <h2 class="section-title">Configuración General</h2>
+                        <div id="general-alert" class="alert" style="display: none;"></div>
+                        <form id="general-form">
+                            <div class="form-group">
+                                <label for="site-title">Título del Sitio</label>
+                                <input type="text" id="site-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="logo-text">Texto del Logo</label>
+                                <input type="text" id="logo-text" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hero-title">Título Principal (Hero)</label>
+                                <input type="text" id="hero-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hero-description">Descripción Principal (Hero)</label>
+                                <textarea id="hero-description" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Correo de Contacto</label>
+                                <input type="email" id="contact-email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-phone">Teléfono de Contacto</label>
+                                <input type="text" id="contact-phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-description">Descripción de Contacto</label>
+                                <textarea id="contact-description" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="footer-title">Título del Footer</label>
+                                <input type="text" id="footer-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="footer-description">Descripción del Footer</label>
+                                <textarea id="footer-description" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="copyright-text">Texto de Copyright</label>
+                                <input type="text" id="copyright-text" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn">Guardar Configuración</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Quiénes Somos -->
+                    <div id="about-tab" class="tab-content">
+                        <h2 class="section-title">Quiénes Somos</h2>
+                        <div id="about-alert" class="alert" style="display: none;"></div>
+                        <form id="about-form">
+                            <div class="form-group">
+                                <label for="about-title">Título</label>
+                                <input type="text" id="about-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="about-content">Contenido (Separa párrafos con saltos de línea)</label>
+                                <textarea id="about-content" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="about-image">Imagen</label>
+                                <input type="file" id="about-image" class="form-control" accept="image/*">
+                                <img id="about-image-preview" class="image-preview" src="#" alt="Vista previa de la imagen">
+                                <input type="hidden" id="about-image-url">
+                            </div>
+                            <button type="submit" class="btn">Guardar Información</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Productos -->
+                    <div id="products-tab" class="tab-content">
+                        <h2 class="section-title">Productos</h2>
+                        <div id="products-alert" class="alert" style="display: none;"></div>
+                        
+                        <div class="form-group">
+                            <button id="add-product-btn" class="btn">Agregar Producto</button>
+                        </div>
+                        
+                        <div id="product-form-container" style="display: none; margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 5px;">
+                            <h3 id="product-form-title">Agregar Nuevo Producto</h3>
+                            <form id="product-form">
+                                <input type="hidden" id="product-id">
+                                <div class="form-group">
+                                    <label for="product-name">Nombre del Producto</label>
+                                    <input type="text" id="product-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-description">Descripción</label>
+                                    <textarea id="product-description" class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-icon">Icono (Clase de FontAwesome)</label>
+                                    <input type="text" id="product-icon" class="form-control" placeholder="Ej: fa-boxes" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-order">Orden de Visualización</label>
+                                    <input type="number" id="product-order" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn">Guardar Producto</button>
+                                <button type="button" id="cancel-product-btn" class="btn btn-secondary">Cancelar</button>
+                            </form>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Orden</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table">
+                                <!-- Los productos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Clientes -->
+                    <div id="clients-tab" class="tab-content">
+                        <h2 class="section-title">Clientes</h2>
+                        <div id="clients-alert" class="alert" style="display: none;"></div>
+                        
+                        <div class="form-group">
+                            <button id="add-client-btn" class="btn">Agregar Cliente</button>
+                        </div>
+                        
+                        <div id="client-form-container" style="display: none; margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 5px;">
+                            <h3 id="client-form-title">Agregar Nuevo Cliente</h3>
+                            <form id="client-form">
+                                <input type="hidden" id="client-id">
+                                <div class="form-group">
+                                    <label for="client-name">Nombre del Cliente</label>
+                                    <input type="text" id="client-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="client-logo">Logo (URL)</label>
+                                    <input type="text" id="client-logo" class="form-control" required>
+                                    <small>Sube la imagen a un servicio como Imgur o Cloudinary y pega la URL aquí</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="client-order">Orden de Visualización</label>
+                                    <input type="number" id="client-order" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn">Guardar Cliente</button>
+                                <button type="button" id="cancel-client-btn" class="btn btn-secondary">Cancelar</button>
+                            </form>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Logo</th>
+                                    <th>Orden</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-table">
+                                <!-- Los clientes se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Redes Sociales -->
+                    <div id="social-tab" class="tab-content">
+                        <h2 class="section-title">Redes Sociales</h2>
+                        <div id="social-alert" class="alert" style="display: none;"></div>
+                        
+                        <div class="form-group">
+                            <button id="add-social-btn" class="btn">Agregar Red Social</button>
+                        </div>
+                        
+                        <div id="social-form-container" style="display: none; margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 5px;">
+                            <h3 id="social-form-title">Agregar Nueva Red Social</h3>
+                            <form id="social-form">
+                                <input type="hidden" id="social-id">
+                                <div class="form-group">
+                                    <label for="social-name">Nombre</label>
+                                    <input type="text" id="social-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="social-url">URL</label>
+                                    <input type="url" id="social-url" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="social-icon">Icono (Clase de FontAwesome)</label>
+                                    <input type="text" id="social-icon" class="form-control" placeholder="Ej: fa-facebook-f" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="social-order">Orden de Visualización</label>
+                                    <input type="number" id="social-order" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn">Guardar Red Social</button>
+                                <button type="button" id="cancel-social-btn" class="btn btn-secondary">Cancelar</button>
+                            </form>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>URL</th>
+                                    <th>Icono</th>
+                                    <th>Orden</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="social-table">
+                                <!-- Las redes sociales se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Mensajes de Contacto -->
+                    <div id="messages-tab" class="tab-content">
+                        <h2 class="section-title">Mensajes de Contacto</h2>
+                        <div id="messages-alert" class="alert" style="display: none;"></div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Mensaje</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="messages-table">
+                                <!-- Los mensajes se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLi-egzQlgbKW8XV_qIhU6313Gd8gocCg",
+      authDomain: "inventario-35d6b.firebaseapp.com",
+      databaseURL: "https://inventario-35d6b-default-rtdb.firebaseio.com",
+      projectId: "inventario-35d6b",
+      storageBucket: "inventario-35d6b.appspot.com",
+      messagingSenderId: "266100399659",
+      appId: "1:266100399659:web:92358d28cbd803c8a7d46e"
+    };
+
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Mostrar el panel de administración directamente
+        document.getElementById('admin-panel').style.display = 'block';
+        
+        // Identificar al usuario actual
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('current-user').textContent = user.email || 'Administrador';
+            } else {
+                // Si no hay usuario autenticado, mostrar como administrador anónimo
+                document.getElementById('current-user').textContent = 'Administrador';
+            }
+        });
+
+        // Mostrar alertas
+        function showAlert(element, message, type) {
+            element.textContent = message;
+            element.className = `alert alert-${type}`;
+            element.style.display = 'block';
+            
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        }
+
+        // Navegación entre pestañas
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remover clase active de todos los enlaces
+                navLinks.forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                
+                // Agregar clase active al enlace clickeado
+                link.classList.add('active');
+                
+                // Ocultar todos los contenidos
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Mostrar el contenido correspondiente
+                const tabId = link.getAttribute('data-tab') + '-tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Cargar datos para el panel de administración desde la colección admWeb
+        function loadAdminData() {
+            // Cargar configuración general
+            db.collection('admWeb').doc('general').get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('site-title').value = data.siteTitle || '';
+                        document.getElementById('logo-text').value = data.logoText || '';
+                        document.getElementById('hero-title').value = data.heroTitle || '';
+                        document.getElementById('hero-description').value = data.heroDescription || '';
+                        document.getElementById('contact-email').value = data.contactEmail || '';
+                        document.getElementById('contact-phone').value = data.contactPhone || '';
+                        document.getElementById('contact-description').value = data.contactDescription || '';
+                        document.getElementById('footer-title').value = data.footerTitle || '';
+                        document.getElementById('footer-description').value = data.footerDescription || '';
+                        document.getElementById('copyright-text').value = data.copyrightText || '';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cargando configuración general:", error);
+                });
+            
+            // Cargar información "Quiénes Somos"
+            db.collection('admWeb').doc('aboutUs').get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('about-title').value = data.title || '';
+                        document.getElementById('about-content').value = data.content || '';
+                        document.getElementById('about-image-url').value = data.imageUrl || '';
+                        
+                        const preview = document.getElementById('about-image-preview');
+                        if (data.imageUrl) {
+                            preview.src = data.imageUrl;
+                            preview.style.display = 'block';
+                        } else {
+                            preview.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cargando información 'Quiénes Somos':", error);
+                });
+            
+            // Cargar productos
+            loadProducts();
+            
+            // Cargar clientes
+            loadClients();
+            
+            // Cargar redes sociales
+            loadSocialLinks();
+            
+            // Cargar mensajes
+            loadMessages();
+        }
+
+        // Cargar datos al iniciar
+        loadAdminData();
+
+        // Guardar configuración general en admWeb
+        document.getElementById('general-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const alert = document.getElementById('general-alert');
+            
+            const data = {
+                siteTitle: document.getElementById('site-title').value,
+                logoText: document.getElementById('logo-text').value,
+                heroTitle: document.getElementById('hero-title').value,
+                heroDescription: document.getElementById('hero-description').value,
+                contactEmail: document.getElementById('contact-email').value,
+                contactPhone: document.getElementById('contact-phone').value,
+                contactDescription: document.getElementById('contact-description').value,
+                footerTitle: document.getElementById('footer-title').value,
+                footerDescription: document.getElementById('footer-description').value,
+                copyrightText: document.getElementById('copyright-text').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            db.collection('admWeb').doc('general').set(data, { merge: true })
+                .then(() => {
+                    showAlert(alert, 'Configuración guardada correctamente', 'success');
+                })
+                .catch(error => {
+                    showAlert(alert, 'Error al guardar la configuración: ' + error.message, 'error');
+                });
+        });
+
+        // Guardar información "Quiénes Somos" en admWeb
+        document.getElementById('about-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const alert = document.getElementById('about-alert');
+            
+            const data = {
+                title: document.getElementById('about-title').value,
+                content: document.getElementById('about-content').value,
+                imageUrl: document.getElementById('about-image-url').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            db.collection('admWeb').doc('aboutUs').set(data, { merge: true })
+                .then(() => {
+                    showAlert(alert, 'Información guardada correctamente', 'success');
+                })
+                .catch(error => {
+                    showAlert(alert, 'Error al guardar la información: ' + error.message, 'error');
+                });
+        });
+
+        // Vista previa de imagen
+        document.getElementById('about-image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const preview = document.getElementById('about-image-preview');
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('about-image-url').value = e.target.result;
+            };
+            
+            reader.readAsDataURL(file);
+        });
+
+        // Funciones para productos (ahora en subcolección admWeb/productos)
+        function loadProducts() {
+            const productsTable = document.getElementById('products-table');
+            productsTable.innerHTML = '';
+            
+            db.collection('admWeb').doc('config').collection('productos').orderBy('order', 'asc').get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const product = doc.data();
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${product.name}</td>
+                            <td>${product.description.substring(0, 50)}...</td>
+                            <td>${product.order}</td>
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${doc.id}">Editar</button>
+                                <button class="action-btn delete-btn" data-id="${doc.id}">Eliminar</button>
+                            </td>
+                        `;
+                        
+                        productsTable.appendChild(row);
+                    });
+                    
+                    // Agregar eventos a los botones
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', () => editProduct(btn.getAttribute('data-id')));
+                    });
+                    
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', () => deleteProduct(btn.getAttribute('data-id')));
+                    });
+                })
+                .catch(error => {
+                    console.error("Error cargando productos:", error);
+                });
+        }
+
+        function editProduct(id) {
+            db.collection('admWeb').doc('config').collection('productos').doc(id).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const product = doc.data();
+                        
+                        document.getElementById('product-id').value = id;
+                        document.getElementById('product-name').value = product.name;
+                        document.getElementById('product-description').value = product.description;
+                        document.getElementById('product-icon').value = product.icon;
+                        document.getElementById('product-order').value = product.order;
+                        
+                        document.getElementById('product-form-title').textContent = 'Editar Producto';
+                        document.getElementById('product-form-container').style.display = 'block';
+                        document.getElementById('add-product-btn').style.display = 'none';
+                        
+                        // Desplazar hacia el formulario
+                        document.getElementById('product-form-container').scrollIntoView({ behavior: 'smooth' });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cargando producto:", error);
+                });
+        }
+
+        function deleteProduct(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                db.collection('admWeb').doc('config').collection('productos').doc(id).delete()
+                    .then(() => {
+                        loadProducts();
+                        showAlert(document.getElementById('products-alert'), 'Producto eliminado correctamente', 'success');
+                    })
+                    .catch(error => {
+                        showAlert(document.getElementById('products-alert'), 'Error al eliminar el producto: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        document.getElementById('add-product-btn').addEventListener('click', () => {
+            document.getElementById('product-form').reset();
+            document.getElementById('product-id').value = '';
+            document.getElementById('product-form-title').textContent = 'Agregar Nuevo Producto';
+            document.getElementById('product-form-container').style.display = 'block';
+            document.getElementById('add-product-btn').style.display = 'none';
+            
+            // Desplazar hacia el formulario
+            document.getElementById('product-form-container').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('cancel-product-btn').addEventListener('click', () => {
+            document.getElementById('product-form-container').style.display = 'none';
+            document.getElementById('add-product-btn').style.display = 'block';
+        });
+
+        document.getElementById('product-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const alert = document.getElementById('products-alert');
+            const productId = document.getElementById('product-id').value;
+            
+            const data = {
+                name: document.getElementById('product-name').value,
+                description: document.getElementById('product-description').value,
+                icon: document.getElementById('product-icon').value,
+                order: parseInt(document.getElementById('product-order').value),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            if (productId) {
+                // Actualizar producto existente
+                db.collection('admWeb').doc('config').collection('productos').doc(productId).update(data)
+                    .then(() => {
+                        showAlert(alert, 'Producto actualizado correctamente', 'success');
+                        loadProducts();
+                        document.getElementById('product-form-container').style.display = 'none';
+                        document.getElementById('add-product-btn').style.display = 'block';
+                    })
+                    .catch(error => {
+                        showAlert(alert, 'Error al actualizar el producto: ' + error.message, 'error');
+                    });
+            } else {
+                // Agregar nuevo producto
+                db.collection('admWeb').doc('config').collection('productos').add(data)
+                    .then(() => {
+                        showAlert(alert, 'Producto agregado correctamente', 'success');
+                        loadProducts();
+                        document.getElementById('product-form-container').style.display = 'none';
+                        document.getElementById('add-product-btn').style.display = 'block';
+                    })
+                    .catch(error => {
+                        showAlert(alert, 'Error al agregar el producto: ' + error.message, 'error');
+                    });
+            }
+        });
+
+        // Funciones para clientes (ahora en subcolección admWeb/clientes)
+        function loadClients() {
+            const clientsTable = document.getElementById('clients-table');
+            clientsTable.innerHTML = '';
+            
+            db.collection('admWeb').doc('config').collection('clientes').orderBy('order', 'asc').get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const client = doc.data();
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${client.name}</td>
+                            <td><img src="${client.logoUrl}" alt="${client.name}" style="max-width: 80px; max-height: 40px;"></td>
+                            <td>${client.order}</td>
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${doc.id}">Editar</button>
+                                <button class="action-btn delete-btn" data-id="${doc.id}">Eliminar</button>
+                            </td>
+                        `;
+                        
+                        clientsTable.appendChild(row);
+                    });
+                    
+                    // Agregar eventos a los botones
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', () => editClient(btn.getAttribute('data-id')));
+                    });
+                    
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', () => deleteClient(btn.getAttribute('data-id')));
+                    });
+                })
+                .catch(error => {
+                    console.error("Error cargando clientes:", error);
+                });
+        }
+
+        function editClient(id) {
+            db.collection('admWeb').doc('config').collection('clientes').doc(id).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const client = doc.data();
+                        
+                        document.getElementById('client-id').value = id;
+                        document.getElementById('client-name').value = client.name;
+                        document.getElementById('client-logo').value = client.logoUrl;
+                        document.getElementById('client-order').value = client.order;
+                        
+                        document.getElementById('client-form-title').textContent = 'Editar Cliente';
+                        document.getElementById('client-form-container').style.display = 'block';
+                        document.getElementById('add-client-btn').style.display = 'none';
+                        
+                        // Desplazar hacia el formulario
+                        document.getElementById('client-form-container').scrollIntoView({ behavior: 'smooth' });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cargando cliente:", error);
+                });
+        }
+
+        function deleteClient(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+                db.collection('admWeb').doc('config').collection('clientes').doc(id).delete()
+                    .then(() => {
+                        loadClients();
+                        showAlert(document.getElementById('clients-alert'), 'Cliente eliminado correctamente', 'success');
+                    })
+                    .catch(error => {
+                        showAlert(document.getElementById('clients-alert'), 'Error al eliminar el cliente: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        document.getElementById('add-client-btn').addEventListener('click', () => {
+            document.getElementById('client-form').reset();
+            document.getElementById('client-id').value = '';
+            document.getElementById('client-form-title').textContent = 'Agregar Nuevo Cliente';
+            document.getElementById('client-form-container').style.display = 'block';
+            document.getElementById('add-client-btn').style.display = 'none';
+            
+            // Desplazar hacia el formulario
+            document.getElementById('client-form-container').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('cancel-client-btn').addEventListener('click', () => {
+            document.getElementById('client-form-container').style.display = 'none';
+            document.getElementById('add-client-btn').style.display = 'block';
+        });
+
+        document.getElementById('client-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const alert = document.getElementById('clients-alert');
+            const clientId = document.getElementById('client-id').value;
+            
+            const data = {
+                name: document.getElementById('client-name').value,
+                logoUrl: document.getElementById('client-logo').value,
+                order: parseInt(document.getElementById('client-order').value),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            if (clientId) {
+                // Actualizar cliente existente
+                db.collection('admWeb').doc('config').collection('clientes').doc(clientId).update(data)
+                    .then(() => {
+                        showAlert(alert, 'Cliente actualizado correctamente', 'success');
+                        loadClients();
+                        document.getElementById('client-form-container').style.display = 'none';
+                        document.getElementById('add-client-btn').style.display = 'block';
+                    })
+                    .catch(error => {
+                        showAlert(alert, 'Error al actualizar el cliente: ' + error.message, 'error');
+                    });
+            } else {
+                // Agregar nuevo cliente
+                db.collection('admWeb').doc('config').collection('clientes').add(data)
+                    .then(() => {
+                        showAlert(alert, 'Cliente agregado correctamente', 'success');
+                        loadClients();
+                        document.getElementById('client-form-container').style.display = 'none';
+                        document.getElementById('add-client-btn').style.display = 'block';
+                    })
+                    .catch(error => {
+                        showAlert(alert, 'Error al agregar el cliente: ' + error.message, 'error');
+                    });
+            }
+        });
+
+        // Funciones para redes sociales (ahora en subcolección admWeb/redesSociales)
+        function loadSocialLinks() {
+            const socialTable = document.getElementById('social-table');
+            socialTable.innerHTML = '';
+            
+            db.collection('admWeb').doc('config').collection('redesSociales').orderBy('order', 'asc').get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const social = doc.data();
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${social.name}</td>
+                            <td><a href="${social.url}" target="_blank">${social.url.substring(0, 30)}...</a></td>
+                            <td><i class="fab ${social.icon}"></i> ${social.icon}</td>
+                            <td>${social.order}</td>
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${doc.id}">Editar</button>
+                                <button class="action-btn delete-btn" data-id="${doc.id}">Eliminar</button>
+                            </td>
+                        `;
+                        
+                        socialTable.appendChild(row);
+                    });
+                    
+                    // Agregar eventos a los botones
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', () => editSocialLink(btn.getAttribute('data-id')));
+                    });
+                    
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', () => deleteSocialLink(btn.getAttribute('data-id')));
+                    });
+                })
+                .catch(error => {
+                    console.error("Error cargando redes sociales:", error);
+                });
+        }
+
+        function editSocialLink(id) {
+            db.collection('admWeb').doc('config').collection('redesSociales').doc(id).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const social = doc.data();
+                        
+                        document.getElementById('social-id').value = id;
+                        document.getElementById('social-name').value = social.name;
+                        document.getElementById('social-url').value = social.url;
+                        document.getElementById('social-icon').value = social.icon;
+                        document.getElementById('social-order').value = social.order;
+                        
+                        document.getElementById('social-form-title').textContent = 'Editar Red Social';
+                        document.getElementById('social-form-container').style.display = 'block';
+                        document.getElementById('add-social-btn').style.display = 'none';
+                        
+                        // Desplazar hacia el formulario
+                        document.getElementById('social-form-container').scrollIntoView({ behavior: 'smooth' });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cargando red social:", error);
+                });
+        }
+
+        function deleteSocialLink(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta red social?')) {
+                db.collection('admWeb').doc('config').collection('redesSociales').doc(id).delete()
+                    .then(() => {
+                        loadSocialLinks();
+                        showAlert(document.getElementById('social-alert'), 'Red social eliminada correctamente', 'success');
+                    })
+                    .catch(error => {
+                        showAlert(document.getElementById('social-alert'), 'Error al eliminar la red social: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        document.getElementById('add-social-btn').addEventListener('click', () => {
+            document.getElementById('social-form').reset();
+            document.getElementById('social-id').value = '';
+            document.getElementById('social-form-title').textContent = 'Agregar Nueva Red Social';
+            document.getElementById('social-form-container').style.display = 'block';
+            document.getElementById('add-social-btn').style.display = 'none';
+            
+            // Desplazar hacia el formulario
+            document.getElementById('social-form-container').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('cancel-social-btn').addEventListener('click', () => {
+            document.getElementById('social-form-container').style.display = 'none';
+            document.getElementById('add-social-btn').style.display = 'block';
+        });
+
+        document.getElementById('social-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const alert = document.getElementById('social-alert');
+            const socialId = document.getElementById('social-id').value;
+            
+            const data = {
+                name: document.getElementById('social-name').value,
+                url: document.getElementById('social-url').value,
+                icon: document.getElementById('social-icon').value,
+                order: parseInt(document.getElementById('social-order').value),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            if (socialId) {
+                // Actualizar red social existente
+                db.collection('admWeb').doc('config').collection('redesSociales').doc(socialId).update(data)
+                    .then(() => {
+                        showAlert(alert, 'Red social actualizada correctamente', 'success');
+                        loadSocialLinks();
+                        document.getElementById('social-form-container').style.display = 'none';
+                        document.getElementById('add-social-btn').style.display = 'block';
+                    })
+                    .catch(error => {
+                        showAlert(alert, 'Error al actualizar la red social: ' + error.message, 'error');
+                    });
+            } else {
+                // Agregar nueva red social
+                db.collection('admWeb').doc('config').collection('redesSociales').add(data)
+                    .then(() => {
+                        showAlert(alert, 'Red social agregada correctamente', 'success');
+                        loadSocialLinks();
+                        document.getElementById('social-form-container').style.display = 'none';
+                        document.getElementById('add-social-btn').style.display = 'block';
+                    })
+                    .catch(error => {
+                        showAlert(alert, 'Error al agregar la red social: ' + error.message, 'error');
+                    });
+            }
+        });
+
+        // Funciones para mensajes (ahora en subcolección admWeb/mensajes)
+        function loadMessages() {
+            const messagesTable = document.getElementById('messages-table');
+            messagesTable.innerHTML = '';
+            
+            db.collection('admWeb').doc('config').collection('mensajes').orderBy('timestamp', 'desc').get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const message = doc.data();
+                        const row = document.createElement('tr');
+                        
+                        const date = message.timestamp ? message.timestamp.toDate() : new Date();
+                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                        
+                        row.innerHTML = `
+                            <td>${message.name}</td>
+                            <td>${message.email}</td>
+                            <td>${message.message.substring(0, 50)}...</td>
+                            <td>${formattedDate}</td>
+                            <td>
+                                <button class="action-btn delete-btn" data-id="${doc.id}">Eliminar</button>
+                            </td>
+                        `;
+                        
+                        messagesTable.appendChild(row);
+                    });
+                    
+                    // Agregar eventos a los botones
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', () => deleteMessage(btn.getAttribute('data-id')));
+                    });
+                })
+                .catch(error => {
+                    console.error("Error cargando mensajes:", error);
+                });
+        }
+
+        function deleteMessage(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este mensaje?')) {
+                db.collection('admWeb').doc('config').collection('mensajes').doc(id).delete()
+                    .then(() => {
+                        loadMessages();
+                        showAlert(document.getElementById('messages-alert'), 'Mensaje eliminado correctamente', 'success');
+                    })
+                    .catch(error => {
+                        showAlert(document.getElementById('messages-alert'), 'Error al eliminar el mensaje: ' + error.message, 'error');
+                    });
+            }
+        }
+    </script>
+</body>
+</html>
