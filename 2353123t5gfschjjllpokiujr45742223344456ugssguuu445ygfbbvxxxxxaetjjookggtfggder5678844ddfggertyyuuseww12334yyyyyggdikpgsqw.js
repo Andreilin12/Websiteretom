@@ -1,4 +1,5 @@
-  // Configuración de Firebase
+
+        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDLi-egzQlgbKW8XV_qIhU6313Gd8gocCg",
             authDomain: "inventario-35d6b.firebaseapp.com",
@@ -313,6 +314,36 @@
                 });
         });
         
+        // Mobile Menu Toggle
+        const menuIcon = document.getElementById('menu-icon');
+        const mobileMenuModal = document.getElementById('mobile-menu-modal');
+        const closeMobileMenu = document.querySelector('.close-mobile-menu');
+        
+        menuIcon.addEventListener('click', () => {
+            mobileMenuModal.style.display = 'block';
+            setTimeout(() => {
+                mobileMenuModal.classList.add('open');
+            }, 10);
+        });
+        
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenuModal.classList.remove('open');
+            setTimeout(() => {
+                mobileMenuModal.style.display = 'none';
+            }, 300);
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-nav a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuModal.classList.remove('open');
+                setTimeout(() => {
+                    mobileMenuModal.style.display = 'none';
+                }, 300);
+            });
+        });
+        
         // Cargar todos los datos al iniciar
         document.addEventListener('DOMContentLoaded', () => {
             loadGeneralConfig();
@@ -324,4 +355,3 @@
             // Mostrar alerta de bienvenida
             showAlert('info', 'Bienvenido a Retom RT');
         });
- 
