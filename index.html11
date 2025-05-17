@@ -54,6 +54,16 @@
             align-items: center;
         }
         
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            height: 40px;
+            margin-right: 15px;
+        }
+        
         .logo {
             font-family: 'Orbitron', sans-serif;
             font-size: 2rem;
@@ -68,6 +78,8 @@
         nav ul {
             display: flex;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
         
         nav ul li {
@@ -100,6 +112,96 @@
         
         nav ul li a:hover::after {
             width: 100%;
+        }
+        
+        /* Mobile Menu Icon */
+        .menu-icon {
+            display: none;
+            font-size: 1.8rem;
+            color: var(--light);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .menu-icon:hover {
+            color: var(--primary);
+        }
+        
+        /* Mobile Menu Modal */
+        .mobile-menu-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 80%;
+            max-width: 300px;
+            height: 100%;
+            background: linear-gradient(145deg, #1a1a3a 0%, #0a0a1a 100%);
+            z-index: 2000;
+            padding: 20px;
+            box-sizing: border-box;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            border-left: 1px solid rgba(0, 240, 255, 0.2);
+        }
+        
+        .mobile-menu-modal.open {
+            transform: translateX(0);
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+        }
+        
+        .mobile-menu-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .close-mobile-menu {
+            font-size: 1.5rem;
+            color: var(--light);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-mobile-menu:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu-nav ul {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mobile-menu-nav ul li {
+            margin: 0 0 20px 0;
+        }
+        
+        .mobile-menu-nav ul li a {
+            display: flex;
+            align-items: center;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+        }
+        
+        .mobile-menu-nav ul li a i {
+            margin-right: 10px;
+            width: 25px;
+            text-align: center;
+            color: var(--primary);
         }
         
         .hero {
@@ -184,6 +286,7 @@
             border: 1px solid rgba(0, 240, 255, 0.1);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .product-card::before {
@@ -224,6 +327,73 @@
             font-size: 2.5rem;
             margin-bottom: 20px;
             color: var(--secondary);
+        }
+        
+        /* Modal para detalles del producto */
+        .product-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a3a 0%, #0a0a1a 100%);
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: var(--light);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            margin-right: 20px;
+            color: var(--primary);
+        }
+        
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .modal-body {
+            color: rgba(240, 240, 255, 0.8);
+            line-height: 1.8;
+        }
+        
+        .modal-body p {
+            margin-bottom: 20px;
         }
         
         .about {
@@ -557,21 +727,44 @@
             background: var(--primary);
         }
 
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
             .header-container {
-                flex-direction: column;
+                flex-direction: row;
+            }
+            
+            .menu-icon {
+                display: block;
             }
             
             nav ul {
-                margin-top: 20px;
-            }
-            
-            nav ul li {
-                margin: 0 10px;
+                display: none;
             }
             
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 40px;
             }
             
             .about-content,
@@ -582,12 +775,124 @@
             .about-image {
                 order: -1;
             }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .modal-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .product-card {
+                padding: 20px;
+            }
+            
+            .product-card h3 {
+                font-size: 1.3rem;
+            }
+            
+            .product-card p {
+                font-size: 0.9rem;
+            }
+            
+            .contact-form-container {
+                padding: 20px;
+            }
+            
+            .contact-form input[type="text"],
+            .contact-form input[type="email"],
+            .contact-form textarea {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .contact-form button[type="submit"] {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 70px 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .cta-button {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .client-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .client-logo {
+                max-width: 120px;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .logo-img {
+                height: 30px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Alertas -->
     <div id="alert-container"></div>
+
+    <!-- Mobile Menu Modal -->
+    <div id="mobile-menu-modal" class="mobile-menu-modal">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-logo">RETOM RT</div>
+            <span class="close-mobile-menu">&times;</span>
+        </div>
+        <nav class="mobile-menu-nav">
+            <ul>
+                <li><a href="#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="#productos"><i class="fas fa-boxes"></i> Productos</a></li>
+                <li><a href="#nosotros"><i class="fas fa-users"></i> Nosotros</a></li>
+                <li><a href="#clientes"><i class="fas fa-handshake"></i> Clientes</a></li>
+                <li><a href="#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Modal para detalles del producto -->
+    <div id="product-modal" class="product-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <div class="modal-icon" id="modal-icon"></div>
+                <h2 class="modal-title" id="modal-title"></h2>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
 
     <!-- Enlace a Admin -->
     <a href="admin.html" class="admin-link" title="Panel de Administración">
@@ -596,9 +901,12 @@
 
     <header>
         <div class="container header-container">
-            <a href="#" class="logo">RETOM RT</a>
+            <div class="logo-container">
+                <img src="https://via.placeholder.com/40x40?text=RT" alt="Retom RT Logo" class="logo-img">
+                <a href="#" class="logo" id="logo-text">RETOM RT</a>
+            </div>
             <nav>
-                <ul>
+                <ul id="desktop-menu">
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#productos">Productos</a></li>
                     <li><a href="#nosotros">Nosotros</a></li>
@@ -606,13 +914,16 @@
                     <li><a href="#contacto">Contacto</a></li>
                 </ul>
             </nav>
+            <div class="menu-icon" id="menu-icon">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </header>
 
     <section class="hero" id="inicio">
         <div class="container">
-            <h1>Soluciones Tecnológicas Avanzadas</h1>
-            <p>Software especializado para gestión de inventarios, control de acceso, registro de tiempo y administración de energía. Optimiza tus operaciones con nuestras soluciones digitales futuristas.</p>
+            <h1 id="hero-title">Soluciones Tecnológicas Avanzadas</h1>
+            <p id="hero-description">Software especializado para gestión de inventarios, control de acceso, registro de tiempo y administración de energía. Optimiza tus operaciones con nuestras soluciones digitales futuristas.</p>
             <a href="#contacto" class="cta-button">Contáctanos</a>
         </div>
     </section>
@@ -620,27 +931,8 @@
     <section class="products" id="productos">
         <div class="container">
             <h2 class="section-title">Nuestros Productos</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-icon"><i class="fas fa-boxes"></i></div>
-                    <h3>Retom Stock</h3>
-                    <p>Sistema avanzado de gestión de inventarios con integración de punto de venta. Control total de tu stock en tiempo real con análisis predictivos.</p>
-                </div>
-                <div class="product-card">
-                    <div class="product-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Security System Retom</h3>
-                    <p>Sistema integral para departamentos de seguridad. Control de acceso, monitoreo y registro de eventos con tecnología de última generación.</p>
-                </div>
-                <div class="product-card">
-                    <div class="product-icon"><i class="fas fa-clock"></i></div>
-                    <h3>Time OpenXit</h3>
-                    <p>Sistema de registro de entrada y salida de colaboradores. Generación de reportes, control de horarios y gestión de ausencias.</p>
-                </div>
-                <div class="product-card">
-                    <div class="product-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>EnergyHouse</h3>
-                    <p>Sistema de administración del consumo de energía para residencias y empresas con huéspedes. Monitoreo en tiempo real y optimización de recursos.</p>
-                </div>
+            <div class="product-grid" id="products-container">
+                <!-- Los productos se cargarán aquí dinámicamente -->
             </div>
         </div>
     </section>
@@ -650,13 +942,15 @@
             <h2 class="section-title">Quiénes Somos</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <h2>Innovación Tecnológica para un Futuro Eficiente</h2>
-                    <p>Retom RT es una empresa especializada en el desarrollo de soluciones tecnológicas avanzadas para la gestión empresarial. Nuestro enfoque está en crear sistemas intuitivos, poderosos y futuristas que transformen la manera en que las empresas operan.</p>
-                    <p>Con años de experiencia en el sector, hemos desarrollado una suite de productos que abarca desde la gestión de inventarios hasta el control de acceso y administración de energía, siempre con el objetivo de optimizar procesos y reducir costos.</p>
-                    <p>Nuestro equipo de ingenieros y desarrolladores trabaja constantemente para incorporar las últimas tecnologías en nuestros productos, asegurando que nuestros clientes siempre tengan acceso a las herramientas más avanzadas del mercado.</p>
+                    <h2 id="about-title">Innovación Tecnológica para un Futuro Eficiente</h2>
+                    <div id="about-content">
+                        <p>Retom RT es una empresa especializada en el desarrollo de soluciones tecnológicas avanzadas para la gestión empresarial. Nuestro enfoque está en crear sistemas intuitivos, poderosos y futuristas que transformen la manera en que las empresas operan.</p>
+                        <p>Con años de experiencia en el sector, hemos desarrollado una suite de productos que abarca desde la gestión de inventarios hasta el control de acceso y administración de energía, siempre con el objetivo de optimizar procesos y reducir costos.</p>
+                        <p>Nuestro equipo de ingenieros y desarrolladores trabaja constantemente para incorporar las últimas tecnologías en nuestros productos, asegurando que nuestros clientes siempre tengan acceso a las herramientas más avanzadas del mercado.</p>
+                    </div>
                 </div>
                 <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Equipo de Retom RT">
+                    <img id="about-image" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Equipo de Retom RT">
                 </div>
             </div>
         </div>
@@ -665,13 +959,8 @@
     <section class="clients" id="clientes">
         <div class="container">
             <h2 class="section-title">Nuestros Clientes</h2>
-            <div class="client-grid">
-                <img src="https://via.placeholder.com/150x80?text=Cliente+1" alt="Cliente 1" class="client-logo">
-                <img src="https://via.placeholder.com/150x80?text=Cliente+2" alt="Cliente 2" class="client-logo">
-                <img src="https://via.placeholder.com/150x80?text=Cliente+3" alt="Cliente 3" class="client-logo">
-                <img src="https://via.placeholder.com/150x80?text=Cliente+4" alt="Cliente 4" class="client-logo">
-                <img src="https://via.placeholder.com/150x80?text=Cliente+5" alt="Cliente 5" class="client-logo">
-                <img src="https://via.placeholder.com/150x80?text=Cliente+6" alt="Cliente 6" class="client-logo">
+            <div class="client-grid" id="clients-container">
+                <!-- Los clientes se cargarán aquí dinámicamente -->
             </div>
         </div>
     </section>
@@ -681,12 +970,12 @@
             <h2 class="section-title">Contacto</h2>
             <div class="contact-container">
                 <div class="contact-info">
-                    <h3>Ponte en Contacto</h3>
+                    <h3 id="footer-title">Ponte en Contacto</h3>
                     <div class="contact-details">
-                        <p><i class="fas fa-envelope"></i> info@retomrt.com</p>
-                        <p><i class="fas fa-phone"></i> (840) 515-8440</p>
+                        <p><i class="fas fa-envelope"></i> <span id="contact-email">info@retomrt.com</span></p>
+                        <p><i class="fas fa-phone"></i> <span id="contact-phone">(840) 515-8440</span></p>
                     </div>
-                    <p>Estamos disponibles para responder tus preguntas y asesorarte sobre cuál de nuestras soluciones se adapta mejor a tus necesidades.</p>
+                    <p id="contact-description">Estamos disponibles para responder tus preguntas y asesorarte sobre cuál de nuestras soluciones se adapta mejor a tus necesidades.</p>
                     <p>Nuestro equipo de soporte está listo para ayudarte con cualquier consulta técnica o comercial que puedas tener sobre nuestros productos.</p>
                 </div>
                 <div class="contact-form-container">
@@ -717,16 +1006,13 @@
         <div class="container">
             <div class="footer-container">
                 <div class="footer-column">
-                    <h4>Retom RT</h4>
-                    <p>Soluciones tecnológicas avanzadas para la gestión empresarial. Software especializado para mejorar la eficiencia operativa.</p>
+                    <h4 id="footer-title">Retom RT</h4>
+                    <p id="footer-description">Soluciones tecnológicas avanzadas para la gestión empresarial. Software especializado para mejorar la eficiencia operativa.</p>
                 </div>
                 <div class="footer-column">
                     <h4>Productos</h4>
-                    <ul>
-                        <li><a href="#">Retom Stock</a></li>
-                        <li><a href="#">Security System Retom</a></li>
-                        <li><a href="#">Time OpenXit</a></li>
-                        <li><a href="#">EnergyHouse</a></li>
+                    <ul id="footer-products">
+                        <!-- Los productos se cargarán aquí dinámicamente -->
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -741,29 +1027,27 @@
                 </div>
                 <div class="footer-column">
                     <h4>Síguenos</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    <div class="social-links" id="social-links">
+                        <!-- Las redes sociales se cargarán aquí dinámicamente -->
                     </div>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Retom RT. Todos los derechos reservados.</p>
+                <p id="copyright-text">&copy; 2023 Retom RT. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Inicialización de Firebase
+        // Configuración de Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyD3JZf4JwJ6X9X9X9X9X9X9X9X9X9X9X9X",
-            authDomain: "retomrt-web.firebaseapp.com",
-            projectId: "retomrt-web",
-            storageBucket: "retomrt-web.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:9X9X9X9X9X9X9X9X9X9X9"
+            apiKey: "AIzaSyDLi-egzQlgbKW8XV_qIhU6313Gd8gocCg",
+            authDomain: "inventario-35d6b.firebaseapp.com",
+            databaseURL: "https://inventario-35d6b-default-rtdb.firebaseio.com",
+            projectId: "inventario-35d6b",
+            storageBucket: "inventario-35d6b.appspot.com",
+            messagingSenderId: "266100399659",
+            appId: "1:266100399659:web:92358d28cbd803c8a7d46e"
         };
 
         // Inicializar Firebase
@@ -806,6 +1090,228 @@
             }, 5000);
         }
         
+        // Cargar configuración general
+        function loadGeneralConfig() {
+            db.collection('configuracion').doc('general').get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        // Configuración del sitio
+                        document.getElementById('logo-text').textContent = data.logoText || 'RETOM RT';
+                        document.getElementById('hero-title').textContent = data.heroTitle || 'Soluciones Tecnológicas Avanzadas';
+                        document.getElementById('hero-description').textContent = data.heroDescription || 'Software especializado para gestión de inventarios, control de acceso, registro de tiempo y administración de energía. Optimiza tus operaciones con nuestras soluciones digitales futuristas.';
+                        
+                        // Información de contacto
+                        document.getElementById('contact-email').textContent = data.contactEmail || 'info@retomrt.com';
+                        document.getElementById('contact-phone').textContent = data.contactPhone || '(840) 515-8440';
+                        document.getElementById('contact-description').textContent = data.contactDescription || 'Estamos disponibles para responder tus preguntas y asesorarte sobre cuál de nuestras soluciones se adapta mejor a tus necesidades.';
+                        
+                        // Footer
+                        document.getElementById('footer-title').textContent = data.footerTitle || 'Retom RT';
+                        document.getElementById('footer-description').textContent = data.footerDescription || 'Soluciones tecnológicas avanzadas para la gestión empresarial. Software especializado para mejorar la eficiencia operativa.';
+                        document.getElementById('copyright-text').textContent = data.copyrightText || '© 2023 Retom RT. Todos los derechos reservados.';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cargando configuración general:", error);
+                    showAlert('error', 'Error al cargar la configuración del sitio');
+                });
+        }
+
+        // Cargar información "Quiénes Somos"
+        function loadAboutUs() {
+            db.collection('configuracion').doc('aboutUs').get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        document.getElementById('about-title').textContent = data.title || 'Innovación Tecnológica para un Futuro Eficiente';
+                        
+                        // Convertir saltos de línea en párrafos
+                        const content = data.content || '';
+                        const paragraphs = content.split('\n').filter(p => p.trim() !== '');
+                        
+                        const aboutContent = document.getElementById('about-content');
+                        aboutContent.innerHTML = '';
+                        
+                        paragraphs.forEach(p => {
+                            const paragraph = document.createElement('p');
+                            paragraph.textContent = p;
+                            aboutContent.appendChild(paragraph);
+                        });
+                        
+                        // Imagen
+                        if (data.imageUrl) {
+                            document.getElementById('about-image').src = data.imageUrl;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cargando información 'Quiénes Somos':", error);
+                    showAlert('error', 'Error al cargar la información de la empresa');
+                });
+        }
+
+        // Cargar productos
+        function loadProducts() {
+            const productsContainer = document.getElementById('products-container');
+            productsContainer.innerHTML = '<div class="product-card"><p>Cargando productos...</p></div>';
+            
+            db.collection('productos').orderBy('order', 'asc').get()
+                .then(querySnapshot => {
+                    if (querySnapshot.empty) {
+                        productsContainer.innerHTML = '<div class="product-card"><p>No hay productos disponibles</p></div>';
+                        return;
+                    }
+                    
+                    productsContainer.innerHTML = '';
+                    
+                    querySnapshot.forEach(doc => {
+                        const product = doc.data();
+                        const productCard = document.createElement('div');
+                        productCard.className = 'product-card';
+                        productCard.setAttribute('data-id', doc.id);
+                        
+                        productCard.innerHTML = `
+                            <div class="product-icon"><i class="${product.icon || 'fas fa-box'}"></i></div>
+                            <h3>${product.name || 'Producto'}</h3>
+                            <p>${product.description ? product.description.substring(0, 100) + '...' : 'Descripción no disponible'}</p>
+                        `;
+                        
+                        // Agregar evento click para mostrar detalles
+                        productCard.addEventListener('click', () => showProductDetails(doc.id, product));
+                        
+                        productsContainer.appendChild(productCard);
+                    });
+                    
+                    // También cargar productos en el footer
+                    loadFooterProducts();
+                })
+                .catch(error => {
+                    console.error("Error cargando productos:", error);
+                    productsContainer.innerHTML = '<div class="product-card"><p>Error al cargar los productos</p></div>';
+                    showAlert('error', 'Error al cargar los productos');
+                });
+        }
+
+        // Mostrar detalles del producto en modal
+        function showProductDetails(id, product) {
+            const modal = document.getElementById('product-modal');
+            const modalIcon = document.getElementById('modal-icon');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            
+            // Configurar contenido del modal
+            modalIcon.className = `modal-icon fas ${product.icon || 'fa-box'}`;
+            modalTitle.textContent = product.name || 'Producto';
+            
+            // Convertir descripción en párrafos si tiene saltos de línea
+            const description = product.description || 'Descripción no disponible';
+            const paragraphs = description.split('\n').filter(p => p.trim() !== '');
+            
+            modalBody.innerHTML = '';
+            
+            paragraphs.forEach(p => {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = p;
+                modalBody.appendChild(paragraph);
+            });
+            
+            // Mostrar modal
+            modal.style.display = 'block';
+            
+            // Cerrar modal al hacer clic en la X
+            document.querySelector('.close-modal').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            // Cerrar modal al hacer clic fuera del contenido
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Cargar productos en el footer
+        function loadFooterProducts() {
+            const footerProducts = document.getElementById('footer-products');
+            footerProducts.innerHTML = '';
+            
+            db.collection('productos').orderBy('order', 'asc').limit(4).get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const product = doc.data();
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="#productos">${product.name || 'Producto'}</a>`;
+                        footerProducts.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error cargando productos para footer:", error);
+                });
+        }
+
+        // Cargar clientes
+        function loadClients() {
+            const clientsContainer = document.getElementById('clients-container');
+            clientsContainer.innerHTML = '<p>Cargando clientes...</p>';
+            
+            db.collection('clientes').orderBy('order', 'asc').get()
+                .then(querySnapshot => {
+                    if (querySnapshot.empty) {
+                        clientsContainer.innerHTML = '<p>No hay clientes para mostrar</p>';
+                        return;
+                    }
+                    
+                    clientsContainer.innerHTML = '';
+                    
+                    querySnapshot.forEach(doc => {
+                        const client = doc.data();
+                        const img = document.createElement('img');
+                        img.className = 'client-logo';
+                        img.src = client.logoUrl || 'https://via.placeholder.com/150x80?text=Cliente';
+                        img.alt = client.name || 'Cliente';
+                        img.title = client.name || '';
+                        
+                        clientsContainer.appendChild(img);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error cargando clientes:", error);
+                    clientsContainer.innerHTML = '<p>Error al cargar los clientes</p>';
+                    showAlert('error', 'Error al cargar los clientes');
+                });
+        }
+
+        // Cargar redes sociales
+        function loadSocialLinks() {
+            const socialLinksContainer = document.getElementById('social-links');
+            socialLinksContainer.innerHTML = '';
+            
+            db.collection('redesSociales').orderBy('order', 'asc').get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const social = doc.data();
+                        const link = document.createElement('a');
+                        link.href = social.url || '#';
+                        link.target = '_blank';
+                        link.title = social.name || 'Red social';
+                        
+                        const icon = document.createElement('i');
+                        icon.className = `fab ${social.icon || 'fa-link'}`;
+                        
+                        link.appendChild(icon);
+                        socialLinksContainer.appendChild(link);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error cargando redes sociales:", error);
+                    showAlert('error', 'Error al cargar las redes sociales');
+                });
+        }
+
         // Manejo del formulario de contacto
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -830,7 +1336,7 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
                     
-                    return db.collection('contactMessages').add(formData);
+                    return db.collection('mensajes').add(formData);
                 })
                 .then(() => {
                     showAlert('success', 'Mensaje enviado correctamente. Nos pondremos en contacto pronto.');
@@ -848,9 +1354,46 @@
                 });
         });
         
-        // Mostrar alerta al cargar
-        window.addEventListener('DOMContentLoaded', () => {
-            // showAlert('info', 'Bienvenido a Retom RT');
+        // Mobile Menu Toggle
+        const menuIcon = document.getElementById('menu-icon');
+        const mobileMenuModal = document.getElementById('mobile-menu-modal');
+        const closeMobileMenu = document.querySelector('.close-mobile-menu');
+        
+        menuIcon.addEventListener('click', () => {
+            mobileMenuModal.style.display = 'block';
+            setTimeout(() => {
+                mobileMenuModal.classList.add('open');
+            }, 10);
+        });
+        
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenuModal.classList.remove('open');
+            setTimeout(() => {
+                mobileMenuModal.style.display = 'none';
+            }, 300);
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-nav a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuModal.classList.remove('open');
+                setTimeout(() => {
+                    mobileMenuModal.style.display = 'none';
+                }, 300);
+            });
+        });
+        
+        // Cargar todos los datos al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGeneralConfig();
+            loadAboutUs();
+            loadProducts();
+            loadClients();
+            loadSocialLinks();
+            
+            // Mostrar alerta de bienvenida
+            showAlert('info', 'Bienvenido a Retom RT');
         });
     </script>
 </body>
