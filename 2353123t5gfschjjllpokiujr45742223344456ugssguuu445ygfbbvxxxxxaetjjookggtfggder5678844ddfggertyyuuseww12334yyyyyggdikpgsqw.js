@@ -58,19 +58,19 @@
                         const data = doc.data();
                         
                         // Configuración del sitio
-                        document.getElementById('logo-text').textContent = data.logoText || 'RETOM RT';
-                        document.getElementById('hero-title').textContent = data.heroTitle || 'Soluciones Tecnológicas Avanzadas';
+                        document.getElementById('logo-text').textContent = data.logoText || 'RETOM';
+                        document.getElementById('hero-title').textContent = data.heroTitle || 'Sorfaware Avanzadas';
                         document.getElementById('hero-description').textContent = data.heroDescription || 'Software especializado para gestión de inventarios, control de acceso, registro de tiempo y administración de energía. Optimiza tus operaciones con nuestras soluciones digitales futuristas.';
                         
                         // Información de contacto
                         document.getElementById('contact-email').textContent = data.contactEmail || 'info@retomrt.com';
-                        document.getElementById('contact-phone').textContent = data.contactPhone || '(840) 515-8440';
+                        document.getElementById('contact-phone').textContent = data.contactPhone || '(849) 515-8440';
                         document.getElementById('contact-description').textContent = data.contactDescription || 'Estamos disponibles para responder tus preguntas y asesorarte sobre cuál de nuestras soluciones se adapta mejor a tus necesidades.';
                         
                         // Footer
-                        document.getElementById('footer-title').textContent = data.footerTitle || 'Retom RT';
+                        document.getElementById('footer-title').textContent = data.footerTitle || 'Retom';
                         document.getElementById('footer-description').textContent = data.footerDescription || 'Soluciones tecnológicas avanzadas para la gestión empresarial. Software especializado para mejorar la eficiencia operativa.';
-                        document.getElementById('copyright-text').textContent = data.copyrightText || '© 2023 Retom RT. Todos los derechos reservados.';
+                        document.getElementById('copyright-text').textContent = data.copyrightText || '© 2025 Retom RT. Todos los derechos reservados.';
                     }
                 })
                 .catch(error => {
@@ -86,7 +86,7 @@
                     if (doc.exists) {
                         const data = doc.data();
                         
-                        document.getElementById('about-title').textContent = data.title || 'Innovación Tecnológica para un Futuro Eficiente';
+                        document.getElementById('about-title').textContent = data.title || 'Innovación de sorfaware para un Futuro Eficiente';
                         
                         // Convertir saltos de línea en párrafos
                         const content = data.content || '';
@@ -353,5 +353,5 @@
             loadSocialLinks();
             
             // Mostrar alerta de bienvenida
-            showAlert('info', 'Bienvenido a Retom RT');
+            showAlert('info', 'Bienvenido a Retom');
         });
