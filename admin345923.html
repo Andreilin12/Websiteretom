@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Retom RT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
+      <link rel="stylesheet" href="admint33tyy3wsdjjk7134wxbbfhk.css"> 
+</head>
+<body>
+    <div id="admin-panel">
+        <header>
+            <div class="container header-container">
+                <a href="#" class="logo">Retom - WebSite Panel de Administración</a>
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="current-user">Administrador</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="container">
+            <div class="admin-panel">
+                <div class="sidebar">
+                    <ul class="sidebar-nav" id="admin-nav">
+                        <li><a href="#" class="active" data-tab="general"><i class="fas fa-cog"></i> Configuración General</a></li>
+                        <li><a href="#" data-tab="about"><i class="fas fa-info-circle"></i> Quiénes Somos</a></li>
+                        <li><a href="#" data-tab="products"><i class="fas fa-boxes"></i> Productos</a></li>
+                        <li><a href="#" data-tab="clients"><i class="fas fa-users"></i> Clientes</a></li>
+                        <li><a href="#" data-tab="social"><i class="fas fa-share-alt"></i> Redes Sociales</a></li>
+                        <li><a href="#" data-tab="messages"><i class="fas fa-envelope"></i> Mensajes</a></li>
+                    </ul>
+                </div>
+                
+                <div class="main-content">
+                    <!-- Configuración General -->
+                    <div id="general-tab" class="tab-content active">
+                        <h2 class="section-title">Configuración General</h2>
+                        <div id="general-alert" class="alert" style="display: none;"></div>
+                        <form id="general-form">
+                            <div class="form-group">
+                                <label for="site-title">Título del Sitio</label>
+                                <input type="text" id="site-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="logo-text">Texto del Logo</label>
+                                <input type="text" id="logo-text" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hero-title">Título Principal (Hero)</label>
+                                <input type="text" id="hero-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hero-description">Descripción Principal (Hero)</label>
+                                <textarea id="hero-description" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Correo de Contacto</label>
+                                <input type="email" id="contact-email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-phone">Teléfono de Contacto</label>
+                                <input type="text" id="contact-phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-description">Descripción de Contacto</label>
+                                <textarea id="contact-description" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="footer-title">Título del Footer</label>
+                                <input type="text" id="footer-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="footer-description">Descripción del Footer</label>
+                                <textarea id="footer-description" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="copyright-text">Texto de Copyright</label>
+                                <input type="text" id="copyright-text" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn">Guardar Configuración</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Quiénes Somos -->
+                    <div id="about-tab" class="tab-content">
+                        <h2 class="section-title">Quiénes Somos</h2>
+                        <div id="about-alert" class="alert" style="display: none;"></div>
+                        <form id="about-form">
+                            <div class="form-group">
+                                <label for="about-title">Título</label>
+                                <input type="text" id="about-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="about-content">Contenido (Separa párrafos con saltos de línea)</label>
+                                <textarea id="about-content" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+    <label for="about-image">Imagen</label>
+    
+    <!-- Ícono Font Awesome como selector -->
+    <i class="fas fa-image image-upload-icon" onclick="document.getElementById('about-image').click();"></i>
+
+    <!-- Input oculto -->
+    <input type="file" id="about-image" accept="image/*" onchange="previewImage(event)">
+    
+    <!-- Vista previa -->
+    <img id="about-image-preview" class="image-preview" src="#" alt="Vista previa de la imagen" style="display: none;">
+    
+    <!-- Campo oculto para guardar URL -->
+    <input type="hidden" id="about-image-url">
+</div>
+                            <button type="submit" class="btn">Guardar Información</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Productos -->
+                    <div id="products-tab" class="tab-content">
+                        <h2 class="section-title">Productos</h2>
+                        <div id="products-alert" class="alert" style="display: none;"></div>
+                        
+                        <div class="form-group">
+                            <button id="add-product-btn" class="btn">Agregar Producto</button>
+                        </div>
+                        
+                        <div id="product-form-container" style="display: none; margin-bottom: 30px; padding: 20px; background: #2c3e50; border-radius: 5px;">
+                            <h3 id="product-form-title">Agregar Nuevo Producto</h3>
+                            <form id="product-form">
+                                <input type="hidden" id="product-id">
+                                <div class="form-group">
+                                    <label for="product-name">Nombre del Producto</label>
+                                    <input type="text" id="product-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-description">Descripción</label>
+                                    <textarea id="product-description" class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-icon">Icono (Clase de FontAwesome)</label>
+                                    <input type="text" id="product-icon" class="form-control" placeholder="Ej: fa-boxes" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-order">Orden de Visualización</label>
+                                    <input type="number" id="product-order" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn">Guardar Producto</button>
+                                <button type="button" id="cancel-product-btn" class="btn btn-secondary">Cancelar</button>
+                            </form>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Orden</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table">
+                                <!-- Los productos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Clientes -->
+                    <div id="clients-tab" class="tab-content">
+                        <h2 class="section-title">Clientes</h2>
+                        <div id="clients-alert" class="alert" style="display: none;"></div>
+                        
+                        <div class="form-group">
+                            <button id="add-client-btn" class="btn">Agregar Cliente</button>
+                        </div>
+                        
+                        <div id="client-form-container" style="display: none; margin-bottom: 30px; padding: 20px; background: #2c3e50; border-radius: 5px;">
+                            <h3 id="client-form-title">Agregar Nuevo Cliente</h3>
+                            <form id="client-form">
+                                <input type="hidden" id="client-id">
+                                <div class="form-group">
+                                    <label for="client-name">Nombre del Cliente</label>
+                                    <input type="text" id="client-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="client-logo">Logo (URL)</label>
+                                    <input type="text" id="client-logo" class="form-control" required>
+                                    <small>Sube la imagen a un servicio como Imgur o Cloudinary y pega la URL aquí</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="client-order">Orden de Visualización</label>
+                                    <input type="number" id="client-order" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn">Guardar Cliente</button>
+                                <button type="button" id="cancel-client-btn" class="btn btn-secondary">Cancelar</button>
+                            </form>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Logo</th>
+                                    <th>Orden</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-table">
+                                <!-- Los clientes se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Redes Sociales -->
+                    <div id="social-tab" class="tab-content">
+                        <h2 class="section-title">Redes Sociales</h2>
+                        <div id="social-alert" class="alert" style="display: none;"></div>
+                        
+                        <div class="form-group">
+                            <button id="add-social-btn" class="btn">Agregar Red Social</button>
+                        </div>
+                        
+                        <div id="social-form-container" style="display: none; margin-bottom: 30px; padding: 20px; background: #2c3e50; border-radius: 5px;">
+                            <h3 id="social-form-title">Agregar Nueva Red Social</h3>
+                            <form id="social-form">
+                                <input type="hidden" id="social-id">
+                                <div class="form-group">
+                                    <label for="social-name">Nombre</label>
+                                    <input type="text" id="social-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="social-url">URL</label>
+                                    <input type="url" id="social-url" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="social-icon">Icono (Clase de FontAwesome)</label>
+                                    <input type="text" id="social-icon" class="form-control" placeholder="Ej: fa-facebook-f" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="social-order">Orden de Visualización</label>
+                                    <input type="number" id="social-order" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn">Guardar Red Social</button>
+                                <button type="button" id="cancel-social-btn" class="btn btn-secondary">Cancelar</button>
+                            </form>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>URL</th>
+                                    <th>Icono</th>
+                                    <th>Orden</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="social-table">
+                                <!-- Las redes sociales se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Mensajes de Contacto -->
+                    <div id="messages-tab" class="tab-content">
+                        <h2 class="section-title">Mensajes de Contacto</h2>
+                        <div id="messages-alert" class="alert" style="display: none;"></div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Mensaje</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="messages-table">
+                                <!-- Los mensajes se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <script src="adminjs23cc53123t5gfschjjllpokiujrgtfggder5678844ddfggertyyuuseww12334yyyyyggdikpgsqw.js"></script>
+</body>
+</html>
