@@ -1,14 +1,14 @@
 
         // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDLi-egzQlgbKW8XV_qIhU6313Gd8gocCg",
-            authDomain: "inventario-35d6b.firebaseapp.com",
-            databaseURL: "https://inventario-35d6b-default-rtdb.firebaseio.com",
-            projectId: "inventario-35d6b",
-            storageBucket: "inventario-35d6b.appspot.com",
-            messagingSenderId: "266100399659",
-            appId: "1:266100399659:web:92358d28cbd803c8a7d46e"
-        };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAMTWJr3mISmNiP-e_KjCO9BdBPi7Uuug4",
+    authDomain: "formulario-2-8929a.firebaseapp.com",
+    projectId: "formulario-2-8929a",
+    storageBucket: "formulario-2-8929a.appspot.com",
+    messagingSenderId: "136908102526",
+    appId: "1:136908102526:web:d0a3bc1e3cb91a3fcab12f",
+    measurementId: "G-HJNZXRENE9"
+  };
 
         // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
